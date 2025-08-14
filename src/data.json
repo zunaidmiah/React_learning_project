@@ -1,0 +1,18 @@
+[
+    {
+        "title": "Card Component",
+        "description": "Updated Card component to accept props for title and subtitle."
+    },
+    {
+        "title": "App Component",
+        "description": "Modified App component to render multiple Card components with different props."
+    },
+    {
+        "title": "Index HTML",
+        "description": "Removed link to external stylesheet as it is not needed."
+    },
+    {
+        "title": "Data JSON",
+        "description": "No changes made to data.json."
+    }
+]
