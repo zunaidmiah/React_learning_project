@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import './style.css';
@@ -10,6 +11,10 @@ import State from './components/State';
 import FormRegister from './components/FormRegister';
 
 function App() {
+  const [title, setTitle] = useState("This is title from App component");
+  const dataChildHanlder = (data) => {
+    setTitle(data);
+  }
   // let cards = [];
   // step 1
   // for (let i = 0; i < Data.length; i++) {
@@ -38,10 +43,11 @@ function App() {
 
     
     <header className="App-header">
+      <p>{title}</p>
       <FormRegister />
       <h4>BD Store</h4>
       <Products productsList={productsList}/>
-      <CardClass title="This title is from Card class component"/>
+      <CardClass title="This title is from Card class component" onChildData={dataChildHanlder} />
       <State />
     </header>
 
