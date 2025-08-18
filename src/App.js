@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+import './style.css';
 // import Card from './components/Card';
 // import Data from './data.json';
 import Products from './components/Products';
@@ -33,11 +34,11 @@ function App() {
       {cards} */}
       {/* end step 2 */}
 
-    <FormRegister />
 
 
     
     <header className="App-header">
+      <FormRegister />
       <h4>BD Store</h4>
       <Products productsList={productsList}/>
       <CardClass title="This title is from Card class component"/>

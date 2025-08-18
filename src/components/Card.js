@@ -1,5 +1,4 @@
 import React from 'react';
-import '../style.css';
 import UserCard from './UserCard';
 
 // const CardTitle = 'Title is here';
