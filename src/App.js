@@ -1,61 +1,93 @@
-import React, { useState } from 'react';
-// import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+
 import './App.css';
-import './style.css';
-// import Card from './components/Card';
-// import Data from './data.json';
-import Products from './components/Products';
-import productsList from './products.json';
-import CardClass from './components/CardClass';
-import State from './components/State';
-import FormRegister from './components/FormRegister';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+// import './style.css';
+
+import UsersList from './components/UsersList';
+import UserRegister from './components/UserRegister';
+import Search from './components/Search';
 
 function App() {
-  const [title, setTitle] = useState("This is title from App component");
-  const dataChildHanlder = (data) => {
-    setTitle(data);
+//   const usersInfo = [
+//     {
+//       id : 1,
+//       name : 'Zunaid Miah',
+//       phone : '01712345678',
+//       email : 'zuanid@gmail.com',
+//       about : 'I am a software engineer, having experience in web development and mobile app development.',
+//     },
+//     {
+//       id : 2,
+//       name : 'John Doe',
+//       phone : '01234567890',
+//       email : 'jonh@gmail.com',
+//       about : 'I am a Web Developer, having experience in web development and mobile app development.',
+//     }
+
+//   ]
+
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState(users);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => response.json())
+        .then(data => {
+            setUsers(data.map(user => ({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                about: user.company.catchPhrase
+            })));
+            setFilteredUsers(data.map(user => ({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                about: user.company.catchPhrase
+            })));
+        });
+    }, []);
+
+  const handleAddUser = (user) => {
+    setUsers((prevUsers) => {
+      return [...prevUsers, user];
+    });
+    toast(`User added suuccesfully`);
   }
-  // let cards = [];
-  // step 1
-  // for (let i = 0; i < Data.length; i++) {
-  //   cards.push(<Card key={i} cardTitleText={Data[i].title} cardSubTitleText={Data[i].description} />);
-  // }
 
-  // Data.map((item, index) => {
-  //   cards.push(<Card key={index} cardTitleText={item.title} cardSubTitleText={item.description} />);
-  // });
-  // end step 1
+  const handleDeleteUser = (id) => {
+    setUsers((prevUsers) => {
+      return prevUsers.filter(user => user.id !== id);
+    });
+    toast(`User with ID ${id} deleted`);
+  }
 
-  // step 2
-  // cards = Data.map((item, index) => <Card key={index} cardTitleText={item.title} cardSubTitleText={item.description} />);
-  // end step 2
+  const handleSearchTerm = (term) => {
+    const searchTerm = term.toLowerCase();
+    const filteredUsers = users.filter((user) => {
+        const userName = user.name.toLowerCase();
+        return userName.startsWith(searchTerm);
+    });
+    setFilteredUsers(filteredUsers);
+  }
   return (
     <div className="App">
-
-      {/* step 2 */}
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      {cards} */}
-      {/* end step 2 */}
-
-
-
-    
-    <header className="App-header">
-      <p>{title}</p>
-      <FormRegister />
-      <h4>BD Store</h4>
-      <Products productsList={productsList}/>
-      <CardClass title="This title is from Card class component" onChildData={dataChildHanlder} />
-      <State />
-    </header>
-
-
-
-
-
-
+      <div className="registerForm">
+        <h1>User Registration</h1>
+        <UserRegister onAddUser={handleAddUser} />
+        <ToastContainer />
+      </div>
+      <hr />
+      <div>
+        <h1>Users list</h1>
+        <hr />
+        <Search onHandleSearch={handleSearchTerm} />
+        <UsersList users={filteredUsers} onDeleteUser={handleDeleteUser} />
+      </div>
     </div>
   );
 }
