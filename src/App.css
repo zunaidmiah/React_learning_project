@@ -77,3 +77,8 @@
   border-radius: 10px;
   background-color: #f9f9f9;
 }
+
+.headerTitle {
+  padding: 20px 0;
+  background-color: #61dafb;
+}

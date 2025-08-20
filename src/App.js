@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import UsersList from './components/UsersList';
 import UserRegister from './components/UserRegister';
 import Search from './components/Search';
+import Reducer from './components/Reducer';
 
 function App() {
 //   const usersInfo = [
@@ -30,6 +31,7 @@ function App() {
 
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState(users);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -57,13 +59,20 @@ function App() {
       return [...prevUsers, user];
     });
     toast(`User added suuccesfully`);
+    setFilteredUsers((prevUsers) => {
+      return [...prevUsers, user];
+    });
+    setShowRegisterForm(false);
   }
 
   const handleDeleteUser = (id) => {
     setUsers((prevUsers) => {
       return prevUsers.filter(user => user.id !== id);
     });
-    toast(`User with ID ${id} deleted`);
+    setFilteredUsers((prevUsers) => {
+      return prevUsers.filter(user => user.id !== id);
+    });
+    toast(`User with ID ${id} deleted successfully`);
   }
 
   const handleSearchTerm = (term) => {
@@ -74,20 +83,42 @@ function App() {
     });
     setFilteredUsers(filteredUsers);
   }
+
+  const toggleRegisterForm = () => {
+    setShowRegisterForm(!showRegisterForm);
+  }
+
   return (
     <div className="App">
-      <div className="registerForm">
-        <h1>User Registration</h1>
-        <UserRegister onAddUser={handleAddUser} />
-        <ToastContainer />
-      </div>
-      <hr />
+      {showRegisterForm &&
+        <>
+          <div className="registerForm">
+            <h1>User Registration</h1>
+            <UserRegister onAddUser={handleAddUser} />
+          </div>
+          <hr />
+        </>
+      }
       <div>
-        <h1>Users list</h1>
+        <ToastContainer />
+        <h1 className='headerTitle'>Users list</h1>
         <hr />
-        <Search onHandleSearch={handleSearchTerm} />
+        <div className='d-flex justify-content-between align-items-center mb-3 px-4'>
+          <Search onHandleSearch={handleSearchTerm} />
+          <button className="btn btn-primary" onClick={toggleRegisterForm}>
+            {showRegisterForm ? 'Close Form' : 'Add User'}
+          </button>
+        </div>
         <UsersList users={filteredUsers} onDeleteUser={handleDeleteUser} />
       </div>
+
+
+      {/* Reducer Hook */}
+      <hr />
+      <div style={{textAlign: 'left' , padding: '20px' }}>
+        <Reducer />
+      </div>
+      {/* End Reducer Hook */}
     </div>
   );
 }
